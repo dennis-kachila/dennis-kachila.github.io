@@ -5415,6 +5415,8 @@ input[type="submit"] {
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
+    -moz-appearance: button;
+    appearance: button;
     cursor: pointer;
 }
 
@@ -6699,6 +6701,8 @@ Custom Row
 input:-moz-placeholder,
 textarea:-moz-placeholder {
     opacity: 1;
+    filter: alpha(opacity=100);
+    filter: alpha(opacity=100);
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }
 
@@ -13618,6 +13622,7 @@ button.close {
     background-color: transparent;
     border: 0;
     -webkit-appearance: none;
+    appearance: none;
 }
 
 .close {
