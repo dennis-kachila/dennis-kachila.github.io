@@ -1,4 +1,4 @@
-# dennis-kachila.github.io
+# Dennis Kachila
 This is my personal portfolio Website
 
 ## About Me
