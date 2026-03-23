@@ -27,6 +27,7 @@
             imJs.contactForm();
             imJs.wowActive();
             imJs.awsActivation();
+            imJs.portfolioModalDynamic();
             imJs.demoActive();
             imJs.activePopupDemo();
 
@@ -52,6 +53,29 @@
             $('.demo-close-btn').on('click', function(e) {
                 $('.demo-modal-area').removeClass('open');
             })
+        },
+
+        portfolioModalDynamic: function() {
+            $(document).on('click', '.rn-portfolio[data-target="#exampleModalCenter"]', function() {
+                var $card = $(this);
+                var $modal = $('#exampleModalCenter');
+                var $img = $card.find('.thumbnail img').first();
+
+                var projectTag = $card.data('project-tag') || 'Project';
+                var projectTitle = $card.data('project-title') || 'Project Details';
+                var projectDesc1 = $card.data('project-desc1') || '';
+                var projectDesc2 = $card.data('project-desc2') || '';
+                var projectLink = $card.data('project-link') || 'javascript:void(0)';
+
+                $modal.find('.portfolio-popup-thumbnail img')
+                    .attr('src', $img.attr('src'))
+                    .attr('alt', $img.attr('alt'));
+
+                $modal.find('#portfolioModalHeading').html('<span>' + projectTag + '</span> ' + projectTitle);
+                $modal.find('#portfolioModalDesc1').text(projectDesc1);
+                $modal.find('#portfolioModalDesc2').text(projectDesc2);
+                $modal.find('#portfolioModalLink').attr('href', projectLink);
+            });
         },
 
         contactForm: function() {
