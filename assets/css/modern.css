@@ -963,7 +963,13 @@ footer {
 
 @media (max-width: 768px) {
     .navbar .btn-primary {
-        display: none; /* Hide in header on mobile to prevent squeezing */
+        display: inline-block; /* Show in header on mobile */
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        border-radius: 20px;
+    }
+    .nav-actions {
+        gap: 8px !important;
     }
     .btn-menu {
         display: flex; /* Show hamburger button on mobile */
@@ -978,10 +984,10 @@ footer {
         backdrop-filter: blur(25px);
         border-left: 1px solid var(--border-color);
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 30px;
-        padding: 80px 40px;
+        justify-content: flex-start; /* Align to top */
+        align-items: flex-start; /* Left-align links */
+        gap: 0; /* Use padding for spacing */
+        padding: 100px 20px 40px 20px; /* Space at top to clear close icon */
         z-index: 999;
         transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
@@ -992,11 +998,30 @@ footer {
         right: 0; /* Slide in */
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
     }
-    .nav-links a {
-        font-size: 1.1rem;
+    .nav-links li {
         width: 100%;
-        text-align: center;
-        padding: 10px 0;
+    }
+    .nav-links a {
+        font-size: 1.05rem;
+        font-weight: 600;
+        width: 100%;
+        text-align: left;
+        padding: 18px 15px;
+        display: block;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Divider */
+        letter-spacing: 1px;
+        transition: var(--transition);
+    }
+    [data-theme="light"] .nav-links a {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .nav-links a:hover, .nav-links a.active {
+        padding-left: 22px; /* slide on hover */
+        color: var(--accent-primary);
+        background: rgba(255, 255, 255, 0.02);
+    }
+    [data-theme="light"] .nav-links a:hover, [data-theme="light"] .nav-links a.active {
+        background: rgba(0, 0, 0, 0.02);
     }
     .hero-title {
         font-size: 2.3rem;
