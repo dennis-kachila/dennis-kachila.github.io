@@ -109,6 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 lightboxTitle.textContent = titleText;
                 lightboxDesc.textContent = descText;
                 
+                const lightboxHireBtn = document.getElementById('lightbox-hire-btn');
+                if (lightboxHireBtn) {
+                    lightboxHireBtn.setAttribute('href', `hire.html?project=${encodeURIComponent(titleText)}`);
+                }
+                
                 lightbox.classList.add('active');
                 document.body.style.overflow = 'hidden';
             });
