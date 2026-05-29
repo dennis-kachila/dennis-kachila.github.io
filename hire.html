@@ -116,12 +116,14 @@
                         <select id="project-type" class="form-control" required>
                             <option value="" disabled selected>Select a category...</option>
                             <option value="MEP Layouts">MEP Design & AutoCAD/Revit Layouts</option>
-                            <option value="Power Systems">Power Systems Simulation (MATLAB/Simulink)</option>
+                            <option value="Electrical Installations">Electrical Installations & Wiring Works</option>
+                            <option value="MATLAB Simulink">MATLAB/Simulink Modelling & Simulation</option>
                             <option value="SolidWorks CAD">SolidWorks 3D CAD Modelling</option>
-                            <option value="Installation">Electrical Installations & Wiring Works</option>
-                            <option value="Machine Analysis">DC & AC Machine Analysis</option>
                             <option value="Fusion 360">Fusion 360 CAD Design</option>
-                            <option value="Biomedical">Biomedical Engineering & Calibration</option>
+                            <option value="Machine Analysis">DC & AC Machine Analysis</option>
+                            <option value="Medical Design">Medical Equipment Design</option>
+                            <option value="Medical Calibration">Medical Equipment Calibration & PPM</option>
+                            <option value="Medical Repair">Medical Equipment Repair & Maintenance</option>
                             <option value="Other">Other Engineering Services</option>
                         </select>
                     </div>
@@ -200,18 +202,24 @@
                 // Map input query parameters to option values
                 if (project.includes('mep') || project.includes('layout')) {
                     projectTypeSelect.value = 'MEP Layouts';
-                } else if (project.includes('power') || project.includes('simulink') || project.includes('modelling')) {
-                    projectTypeSelect.value = 'Power Systems';
+                } else if (project.includes('matlab') || project.includes('simulink') || project.includes('model')) {
+                    projectTypeSelect.value = 'MATLAB Simulink';
                 } else if (project.includes('solidworks') || project.includes('3d cad')) {
                     projectTypeSelect.value = 'SolidWorks CAD';
                 } else if (project.includes('installation') || project.includes('wiring')) {
-                    projectTypeSelect.value = 'Installation';
+                    projectTypeSelect.value = 'Electrical Installations';
                 } else if (project.includes('machine') || project.includes('analysis') || project.includes('dc')) {
                     projectTypeSelect.value = 'Machine Analysis';
                 } else if (project.includes('fusion')) {
                     projectTypeSelect.value = 'Fusion 360';
-                } else if (project.includes('biomedical') || project.includes('calibration') || project.includes('ppm')) {
-                    projectTypeSelect.value = 'Biomedical';
+                } else if (project.includes('medical design') || project.includes('equipment design')) {
+                    projectTypeSelect.value = 'Medical Design';
+                } else if (project.includes('calibration') || project.includes('ppm')) {
+                    projectTypeSelect.value = 'Medical Calibration';
+                } else if (project.includes('repair') || project.includes('maintenance')) {
+                    projectTypeSelect.value = 'Medical Repair';
+                } else if (project.includes('biomedical') || project.includes('medical')) {
+                    projectTypeSelect.value = 'Medical Design';
                 } else {
                     projectTypeSelect.value = 'Other';
                 }
