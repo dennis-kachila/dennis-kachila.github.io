@@ -171,6 +171,22 @@
         </div>
     </section>
 
+    <!-- Success Modal Overlay -->
+    <div id="success-modal" class="lightbox" style="z-index: 2100;">
+        <div class="lightbox-content">
+            <div class="lightbox-caption" style="max-width: 500px; padding: 35px 30px;">
+                <div style="font-size: 3rem; color: #25D366; margin-bottom: 15px;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 style="font-size: 1.6rem; color: var(--text-primary); margin-bottom: 10px;">Proposal Submitted!</h3>
+                <p id="success-modal-message" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px;">
+                    Thank you! Your project details have been successfully sent directly to Dennis. He will review your scope and get in touch with you shortly.
+                </p>
+                <button id="success-modal-close" class="btn btn-primary" style="padding: 10px 30px; font-size: 0.9rem;">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
@@ -280,32 +296,76 @@
                 window.open(waUrl, '_blank');
             });
 
-            // 2. Email Handler
-            document.getElementById('submit-email').addEventListener('click', () => {
+            // 2. Email Handler (Background submission via FormSubmit.co)
+            const submitEmailBtn = document.getElementById('submit-email');
+            const submitWhatsappBtn = document.getElementById('submit-whatsapp');
+            const successModal = document.getElementById('success-modal');
+            const successModalClose = document.getElementById('success-modal-close');
+            const successModalMessage = document.getElementById('success-modal-message');
+
+            submitEmailBtn.addEventListener('click', () => {
                 const data = getFormDetails();
                 if (!validateForm(data)) return;
 
-                // Format Email Body
-                const emailAddress = "denniskachila4332@gmail.com";
-                const subject = `Project Proposal: ${data.type} - from ${data.name}`;
-                const body = `Dear Dennis,\n\nI would like to discuss a new engineering project collaboration with you. Below are the details:\n\n` +
-                             `Name: ${data.name}\n` +
-                             `Email: ${data.email}\n` +
-                             `Phone/WhatsApp: ${data.phone || 'Not provided'}\n` +
-                             `Project Type: ${data.type}\n` +
-                             `Work Location: ${data.location || 'Not provided'}\n` +
-                             `Expected Timeline: ${data.timeline}\n` +
-                             `Estimated Budget: ${data.budget || 'Not specified'}\n\n` +
-                             `Project Scope & Requirements:\n` +
-                             `--------------------------------------------------\n` +
-                             `${data.scope}\n` +
-                             `--------------------------------------------------\n\n` +
-                             `Best regards,\n` +
-                             `${data.name}`;
+                // Disable buttons and show loading state
+                submitEmailBtn.disabled = true;
+                submitWhatsappBtn.disabled = true;
+                const originalBtnText = submitEmailBtn.innerHTML;
+                submitEmailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-                const mailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                window.location.href = mailtoUrl;
+                // Submit to FormSubmit.co AJAX Endpoint
+                fetch('https://formsubmit.co/ajax/denniskachila4332@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: data.name,
+                        email: data.email,
+                        phone: data.phone || 'Not provided',
+                        project_type: data.type,
+                        work_location: data.location || 'Not provided',
+                        expected_timeline: data.timeline,
+                        estimated_budget: data.budget || 'Not specified',
+                        project_scope: data.scope,
+                        _subject: `New Project Inquiry from ${data.name} (${data.type})`
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(responseData => {
+                    // Show success modal
+                    successModalMessage.innerHTML = `Thank you, <strong>${data.name}</strong>! Your project details for <strong>${data.type}</strong> have been sent directly to Dennis. He will review your requirements and respond to you at <strong>${data.email}</strong> shortly.`;
+                    successModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+
+                    // Reset Form
+                    form.reset();
+                })
+                .catch(error => {
+                    console.error('Submission error:', error);
+                    alert('Oops! Something went wrong while sending in the background. Please try again, or use the "Send via WhatsApp" option.');
+                })
+                .finally(() => {
+                    // Restore buttons
+                    submitEmailBtn.disabled = false;
+                    submitWhatsappBtn.disabled = false;
+                    submitEmailBtn.innerHTML = originalBtnText;
+                });
             });
+
+            // Close Success Modal
+            if (successModalClose && successModal) {
+                successModalClose.addEventListener('click', () => {
+                    successModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
         });
     </script>
     <!-- Scripts -->
