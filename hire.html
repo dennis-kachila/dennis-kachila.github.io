@@ -307,56 +307,36 @@
                 const data = getFormDetails();
                 if (!validateForm(data)) return;
 
-                // Disable buttons and show loading state
-                submitEmailBtn.disabled = true;
-                submitWhatsappBtn.disabled = true;
-                const originalBtnText = submitEmailBtn.innerHTML;
-                submitEmailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                // Create a temporary form to submit via direct POST (redirecting browser)
+                // This ensures FormSubmit sends the activation email and shows the activation screen
+                const tempForm = document.createElement('form');
+                tempForm.method = 'POST';
+                tempForm.action = 'https://formsubmit.co/denniskachila4332@gmail.com';
 
-                // Submit to FormSubmit.co AJAX Endpoint
-                fetch('https://formsubmit.co/ajax/denniskachila4332@gmail.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: data.name,
-                        email: data.email,
-                        phone: data.phone || 'Not provided',
-                        project_type: data.type,
-                        work_location: data.location || 'Not provided',
-                        expected_timeline: data.timeline,
-                        estimated_budget: data.budget || 'Not specified',
-                        project_scope: data.scope,
-                        _subject: `New Project Inquiry from ${data.name} (${data.type})`
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
+                const fields = {
+                    name: data.name,
+                    email: data.email,
+                    phone: data.phone || 'Not provided',
+                    project_type: data.type,
+                    work_location: data.location || 'Not provided',
+                    expected_timeline: data.timeline,
+                    estimated_budget: data.budget || 'Not specified',
+                    project_scope: data.scope,
+                    _subject: `New Project Inquiry from ${data.name} (${data.type})`
+                };
+
+                for (const key in fields) {
+                    if (fields.hasOwnProperty(key)) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = key;
+                        input.value = fields[key];
+                        tempForm.appendChild(input);
                     }
-                    throw new Error('Network response was not ok.');
-                })
-                .then(responseData => {
-                    // Show success modal
-                    successModalMessage.innerHTML = `Thank you, <strong>${data.name}</strong>! Your project details for <strong>${data.type}</strong> have been sent directly to Dennis. He will review your requirements and respond to you at <strong>${data.email}</strong> shortly.`;
-                    successModal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
+                }
 
-                    // Reset Form
-                    form.reset();
-                })
-                .catch(error => {
-                    console.error('Submission error:', error);
-                    alert('Oops! Something went wrong while sending in the background. Please try again, or use the "Send via WhatsApp" option.');
-                })
-                .finally(() => {
-                    // Restore buttons
-                    submitEmailBtn.disabled = false;
-                    submitWhatsappBtn.disabled = false;
-                    submitEmailBtn.innerHTML = originalBtnText;
-                });
+                document.body.appendChild(tempForm);
+                tempForm.submit();
             });
 
             // Close Success Modal
