@@ -313,24 +313,22 @@
                 const originalBtnText = submitEmailBtn.innerHTML;
                 submitEmailBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-                // Submit to FormSubmit.co AJAX Endpoint
-                fetch('https://formsubmit.co/ajax/denniskachila4332@gmail.com', {
+                // Submit to Web3Forms AJAX Endpoint
+                const formData = new FormData();
+                formData.append('access_key', '7ab316dc-0a63-4a9d-b3ba-5a13c31926a0');
+                formData.append('subject', `New Project Inquiry from ${data.name} (${data.type})`);
+                formData.append('name', data.name);
+                formData.append('email', data.email);
+                formData.append('phone', data.phone || 'Not provided');
+                formData.append('project_type', data.type);
+                formData.append('work_location', data.location || 'Not provided');
+                formData.append('expected_timeline', data.timeline);
+                formData.append('estimated_budget', data.budget || 'Not specified');
+                formData.append('project_scope', data.scope);
+
+                fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: data.name,
-                        email: data.email,
-                        phone: data.phone || 'Not provided',
-                        project_type: data.type,
-                        work_location: data.location || 'Not provided',
-                        expected_timeline: data.timeline,
-                        estimated_budget: data.budget || 'Not specified',
-                        project_scope: data.scope,
-                        _subject: `New Project Inquiry from ${data.name} (${data.type})`
-                    })
+                    body: formData
                 })
                 .then(response => {
                     if (response.ok) {
