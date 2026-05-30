@@ -186,4 +186,37 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // ── Portfolio Image Slideshows ──────────────────────────────────────────
+    function initPortfolioSlideshows() {
+        document.querySelectorAll('.portfolio-slideshow').forEach(slideshow => {
+            const slides = slideshow.querySelectorAll('.portfolio-slide');
+            const dotsContainer = slideshow.querySelector('.slideshow-dots');
+            if (!slides.length || !dotsContainer) return;
+
+            // Build dot indicators
+            slides.forEach((_, i) => {
+                const dot = document.createElement('span');
+                dot.classList.add('slideshow-dot');
+                if (i === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            });
+
+            let current = 0;
+            const dots = dotsContainer.querySelectorAll('.slideshow-dot');
+
+            function goTo(index) {
+                slides[current].classList.remove('active');
+                dots[current].classList.remove('active');
+                current = (index + slides.length) % slides.length;
+                slides[current].classList.add('active');
+                dots[current].classList.add('active');
+            }
+
+            // Auto-advance every 4 seconds
+            setInterval(() => goTo(current + 1), 4000);
+        });
+    }
+
+    initPortfolioSlideshows();
 });
