@@ -219,4 +219,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initPortfolioSlideshows();
+
+    // ── Animated Stats Counters ─────────────────────────────────────────────
+    function animateCounter(el) {
+        const target = parseInt(el.dataset.target, 10);
+        const duration = 1500;
+        const startTime = performance.now();
+
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // easeOut cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target);
+            if (progress < 1) requestAnimationFrame(update);
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (statNumbers.length && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(el => observer.observe(el));
+    }
 });
